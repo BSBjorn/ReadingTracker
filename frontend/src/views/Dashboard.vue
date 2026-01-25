@@ -75,6 +75,9 @@
         </div>
       </div>
 
+      <!-- Monthly Pages Chart -->
+      <MonthlyPagesChart class="mb-8" />
+
       <!-- Getting Started (only show if no books) -->
       <div v-if="stats.totalBooks === 0" class="bg-white rounded-lg shadow p-8 text-center">
         <h2 class="text-2xl font-bold text-gray-800 mb-4">Getting Started</h2>
@@ -112,6 +115,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { statsApi } from '../services/api'
+import MonthlyPagesChart from '../components/MonthlyPagesChart.vue'
 
 const stats = ref({
   totalBooks: 0,
