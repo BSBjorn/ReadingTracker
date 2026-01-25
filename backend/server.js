@@ -27,13 +27,13 @@ app.get('/api/db-health', async (req, res) => {
 
 // Import routes
 const booksRoutes = require('./routes/books');
+const statsRoutes = require('./routes/stats');
 // const readingRoutes = require('./routes/reading');
-// const statsRoutes = require('./routes/stats');
 
 // Use routes
 app.use('/api/books', booksRoutes);
+app.use('/api/stats', statsRoutes);
 // app.use('/api/reading', readingRoutes);
-// app.use('/api/stats', statsRoutes);
 
 // Start server
 app.listen(port, () => {
