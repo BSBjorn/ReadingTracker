@@ -1,0 +1,35 @@
+graph TB
+    subgraph "Client Layer"
+        UI[Web UI - React/Vue]
+        UI --> |API Calls| API
+    end
+
+    subgraph "Application Layer"
+        API[REST API - Node.js/Express or Python/FastAPI]
+        API --> |Read/Write| DB
+        API --> |Fetch Book Data| EXT[External Book APIs]
+        API --> |Calculate Stats| STATS[Statistics Service]
+    end
+
+    subgraph "Data Layer"
+        DB[(PostgreSQL Database)]
+        CACHE[(Redis Cache)]
+        API --> |Cache Stats| CACHE
+    end
+
+    subgraph "External Services"
+        EXT --> GOOGLE[Google Books API]
+        EXT --> OPEN[Open Library API]
+    end
+
+    subgraph "Key Database Tables"
+        DB --> BOOKS[Books Table<br/>- id<br/>- title<br/>- author<br/>- pages<br/>- genres<br/>- isbn]
+        DB --> READING[Reading Sessions<br/>- id<br/>- book_id<br/>- start_date<br/>- finish_date<br/>- status]
+        DB --> USERS[Users<br/>- id<br/>- email<br/>- preferences]
+    end
+
+    style UI fill:#e1f5ff
+    style API fill:#fff3e0
+    style DB fill:#f3e5f5
+    style STATS fill:#fff3e0
+    style CACHE fill:#f3e5f5
