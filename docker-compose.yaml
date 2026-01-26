@@ -17,7 +17,48 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - reading-tracker-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: reading-tracker-backend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://reading_user:reading_pass@postgres:5432/reading_tracker
+      PORT: 3000
+      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:5173}
+      NODE_ENV: ${NODE_ENV:-production}
+      GOOGLE_BOOKS_API_KEY: ${GOOGLE_BOOKS_API_KEY}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - reading-tracker-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:3000}
+    container_name: reading-tracker-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - reading-tracker-network
 
 volumes:
   postgres_data:
     driver: local
+
+networks:
+  reading-tracker-network:
+    driver: bridge
