@@ -11,25 +11,16 @@ CREATE TABLE IF NOT EXISTS books (
     isbn VARCHAR(20),
     cover_url VARCHAR(500),
     source VARCHAR(20), -- 'manual', 'google_books', or 'open_library'
-    created_at TIMESTAMP DEFAULT NOW()
-);
-
--- Reading Sessions Table
-CREATE TABLE IF NOT EXISTS reading_sessions (
-    id SERIAL PRIMARY KEY,
-    book_id INTEGER REFERENCES books(id) ON DELETE CASCADE,
-    start_date DATE NOT NULL,
-    finish_date DATE,
-    status VARCHAR(20) DEFAULT 'reading', -- 'reading', 'finished', 'abandoned'
+    start_date DATE,
+    end_date DATE,
     created_at TIMESTAMP DEFAULT NOW()
 );
 
 -- Indexes for better query performance
-CREATE INDEX IF NOT EXISTS idx_reading_sessions_book_id ON reading_sessions(book_id);
-CREATE INDEX IF NOT EXISTS idx_reading_sessions_finish_date ON reading_sessions(finish_date);
-CREATE INDEX IF NOT EXISTS idx_reading_sessions_status ON reading_sessions(status);
 CREATE INDEX IF NOT EXISTS idx_books_title ON books(title);
 CREATE INDEX IF NOT EXISTS idx_books_author ON books(author);
+CREATE INDEX IF NOT EXISTS idx_books_start_date ON books(start_date);
+CREATE INDEX IF NOT EXISTS idx_books_end_date ON books(end_date);
 
 -- Optional: Insert sample data for testing
 INSERT INTO books (title, author, pages, genres, source) VALUES
