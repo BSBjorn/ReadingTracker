@@ -22,12 +22,23 @@ CREATE INDEX IF NOT EXISTS idx_books_author ON books(author);
 CREATE INDEX IF NOT EXISTS idx_books_start_date ON books(start_date);
 CREATE INDEX IF NOT EXISTS idx_books_end_date ON books(end_date);
 
+-- Reading Sessions Table (for tracking re-reads)
+CREATE TABLE IF NOT EXISTS reading_sessions (
+    id SERIAL PRIMARY KEY,
+    book_id INTEGER NOT NULL REFERENCES books(id) ON DELETE CASCADE,
+    start_date DATE,
+    finish_date DATE,
+    status VARCHAR(20) DEFAULT 'reading', -- 'reading', 'finished', 'abandoned'
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Indexes for reading sessions
+CREATE INDEX IF NOT EXISTS idx_reading_sessions_book_id ON reading_sessions(book_id);
+CREATE INDEX IF NOT EXISTS idx_reading_sessions_status ON reading_sessions(status);
+
 -- Optional: Insert sample data for testing
 INSERT INTO books (title, author, pages, genres, source) VALUES
     ('The Hobbit', 'J.R.R. Tolkien', 310, ARRAY['Fantasy', 'Adventure'], 'manual'),
     ('1984', 'George Orwell', 328, ARRAY['Dystopian', 'Science Fiction'], 'manual'),
     ('To Kill a Mockingbird', 'Harper Lee', 281, ARRAY['Classic', 'Fiction'], 'manual')
 ON CONFLICT DO NOTHING;
-
--- Output success message
-SELECT 'Database initialized successfully!' as message;
