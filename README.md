@@ -1,11 +1,24 @@
 # 📚 Reading Tracker
 
-A full-stack web application for tracking your reading journey. Search for books using Google Books API, manage your library, and keep track of when you read each book.
+A full-stack web application for tracking your personal reading journey. Search books via Google Books API, manage your library, track reading dates, and visualize your reading statistics.
+
+## ✨ Features
+
+- 🔍 **Smart Book Search** - Search Google Books API by title, author, or ISBN
+- 📖 **ISBN Detection** - Automatically recognizes ISBN-10 and ISBN-13 formats
+- 📚 **Library Management** - Add, edit, and delete books from your collection
+- 📅 **Reading Dates** - Track when you started and finished each book
+- 🏷️ **Genre Tagging** - Organize books with multiple genre tags
+- 📊 **Dashboard Statistics** - View reading stats (books read, pages, top genres)
+- 📈 **Monthly Charts** - Visualize pages read per month with interactive charts
+- 🎨 **Modern UI** - Clean, responsive design with Tailwind CSS v4
+- 🇳🇴 **Norwegian Date Format** - Dates displayed as dd.mm.yyyy
 
 ## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js 18+ 
+
+- Node.js 18+
 - Podman or Docker
 - PostgreSQL (via container)
 
@@ -16,70 +29,37 @@ A full-stack web application for tracking your reading journey. Search for books
 git clone <your-repo-url>
 cd ReadingTracker
 
-# Start the database
+# Start PostgreSQL database
 ./db.sh start
 
 # Install backend dependencies
 cd backend
 npm install
-cp .env.example .env  # Configure if needed
+cp .env.example .env
 
 # Install frontend dependencies
 cd ../frontend
 npm install
-cp .env.example .env  # Configure if needed
+cp .env.example .env
 ```
 
 ### Running the Application
 
-**Start Backend (Terminal 1):**
+**Terminal 1 - Backend:**
 ```bash
 cd backend
 npm run dev
 # Runs on http://localhost:3000
 ```
 
-**Start Frontend (Terminal 2):**
+**Terminal 2 - Frontend:**
 ```bash
 cd frontend
 npm run dev
 # Runs on http://localhost:5173
 ```
 
-**Access the App:**
-Open http://localhost:5173 in your browser
-
-## 📁 Project Structure
-
-```
-ReadingTracker/
-├── backend/                 # Node.js + Express API
-│   ├── config/             # Database configuration
-│   ├── routes/             # API routes
-│   ├── services/           # Business logic (Google Books integration)
-│   ├── package.json
-│   └── server.js           # Entry point
-├── frontend/               # Vue 3 + Vite frontend
-│   ├── public/            # Static assets
-│   ├── src/
-│   │   ├── assets/        # Styles (Tailwind CSS)
-│   │   ├── components/    # Vue components
-│   │   ├── router/        # Vue Router configuration
-│   │   ├── services/      # API client
-│   │   ├── stores/        # Pinia stores
-│   │   ├── utils/         # Utilities (ISBN detection)
-│   │   ├── views/         # Page components
-│   │   ├── App.vue
-│   │   └── main.js
-│   ├── package.json
-│   └── vite.config.js
-├── docs/                   # Original project documentation
-├── migrations/             # Database migrations
-├── docker-compose.yml      # PostgreSQL container
-├── init-db.sql            # Database schema
-├── db.sh                  # Database management script
-└── *.md                   # Feature documentation
-```
+**Access:** Open http://localhost:5173 in your browser
 
 ## 🛠️ Technology Stack
 
@@ -87,35 +67,60 @@ ReadingTracker/
 - **Runtime:** Node.js
 - **Framework:** Express.js
 - **Database:** PostgreSQL 16
-- **API Integration:** Google Books API (via axios)
+- **API Integration:** Google Books API
 - **Container:** Podman/Docker
 
 ### Frontend
-- **Framework:** Vue 3 (Composition API)
+- **Framework:** Vue 3 (Composition API with `<script setup>`)
 - **Build Tool:** Vite
 - **Styling:** Tailwind CSS v4
 - **Routing:** Vue Router
 - **State Management:** Pinia
+- **Charts:** Chart.js + vue-chartjs
 - **HTTP Client:** Axios
 
-## ✨ Features
+## 📁 Project Structure
 
-- 🔍 **Book Search** - Search Google Books API by title, author, or ISBN
-- 📖 **ISBN Detection** - Smart ISBN recognition (ISBN-10 & ISBN-13)
-- 📚 **Library Management** - Add, edit, and delete books
-- 🏷️ **Genre Tagging** - Organize books by genres
-- 📅 **Reading Dates** - Track when you started and finished reading
-- 🎨 **Modern UI** - Clean, responsive design with Tailwind CSS
-- ✏️ **Book Editing** - Update book details anytime
-- 🇳🇴 **Norwegian Dates** - Date display in dd.mm.yyyy format
+```
+ReadingTracker/
+├── backend/                    # Express.js API server
+│   ├── config/                # Database configuration
+│   ├── routes/                # API endpoints
+│   │   ├── books.js          # Book CRUD + Google Books search
+│   │   └── stats.js          # Statistics endpoints
+│   ├── services/              # Business logic
+│   │   └── bookApiService.js # Google Books integration
+│   ├── server.js              # Entry point
+│   └── .env                   # Environment configuration
+│
+├── frontend/                   # Vue 3 SPA
+│   ├── src/
+│   │   ├── assets/           # Styles (Tailwind CSS)
+│   │   ├── components/       # Vue components
+│   │   │   └── MonthlyPagesChart.vue
+│   │   ├── router/           # Vue Router config
+│   │   ├── services/         # API client
+│   │   ├── utils/            # Utilities (ISBN detection)
+│   │   └── views/            # Page components
+│   │       ├── Dashboard.vue      # Stats & charts
+│   │       ├── BooksView.vue      # Library view
+│   │       └── AddBookView.vue    # Add/edit books
+│   └── .env                   # Environment configuration
+│
+├── migrations/                 # Database migrations
+├── docker-compose.yml          # PostgreSQL container setup
+├── init-db.sql                # Database schema
+├── db.sh                      # Database helper script
+└── README.md                  # This file
+```
 
-## 📊 Database
+## 🗄️ Database
 
-The app uses PostgreSQL running in a container. The database helper script makes management easy:
+The app uses PostgreSQL running in a container. Manage it easily with the helper script:
 
 ```bash
-./db.sh start      # Start PostgreSQL container
-./db.sh stop       # Stop container
+./db.sh start      # Start PostgreSQL
+./db.sh stop       # Stop PostgreSQL
 ./db.sh status     # Check status
 ./db.sh psql       # Open PostgreSQL shell
 ./db.sh logs       # View logs
@@ -123,15 +128,12 @@ The app uses PostgreSQL running in a container. The database helper script makes
 ./db.sh reset      # Reset database
 ```
 
-### Database Schema
+### Schema
 
 **Books Table:**
-- id, title, author, pages, genres, isbn, cover_url, source
-- start_date, end_date (reading tracking)
-- created_at
-
-**Reading Sessions Table** (planned):
-- For tracking re-reads and detailed reading history
+- Core fields: id, title, author, pages, genres (array), isbn
+- Tracking: start_date, end_date
+- Metadata: cover_url, source, created_at
 
 ## 🔌 API Endpoints
 
@@ -144,9 +146,14 @@ The app uses PostgreSQL running in a container. The database helper script makes
 - `PUT /api/books/:id` - Update book
 - `DELETE /api/books/:id` - Delete book
 
-## 📝 Environment Variables
+### Statistics
+- `GET /api/stats/dashboard` - Dashboard overview (total books, currently reading, pages read, etc.)
+- `GET /api/stats/monthly` - Monthly reading data for last 12 months
+- `GET /api/stats/genres` - Genre breakdown
 
-### Backend (.env)
+## ⚙️ Configuration
+
+### Backend Environment Variables (`.env`)
 ```env
 PORT=3000
 NODE_ENV=development
@@ -155,56 +162,150 @@ DB_PORT=5432
 DB_NAME=reading_tracker
 DB_USER=reading_user
 DB_PASSWORD=reading_pass
+CORS_ORIGIN=http://localhost:5173
+GOOGLE_BOOKS_API_KEY=          # Optional
 ```
 
-### Frontend (.env)
+### Frontend Environment Variables (`.env`)
 ```env
 VITE_API_URL=http://localhost:3000/api
 ```
 
-## 🚢 Deployment (Coolify)
+## 🎨 Key Features Explained
 
-This monorepo structure is optimized for deployment with Coolify:
+### Smart Book Search
+- Type any search query (title, author, ISBN)
+- Automatically detects ISBN-10 and ISBN-13 formats
+- Displays results in a visual grid with cover images
+- Click any book to auto-fill the add form
 
-1. **Connect Repository** - Point Coolify to this git repository
-2. **Configure Services:**
-   - **Backend:** Build from `/backend`, Port 3000
-   - **Frontend:** Build from `/frontend`, Port 5173 (or build to static)
-3. **Environment Variables** - Set via Coolify UI
-4. **Database** - Use Coolify's PostgreSQL service or external DB
+### Reading Date Tracking
+- Optional start and end date fields
+- Track books you're currently reading (start date only)
+- Track finished books (both dates)
+- Calculate reading statistics based on dates
 
-### Docker Compose (Optional)
-For self-hosting, the included `docker-compose.yml` sets up PostgreSQL. You can extend it to include backend and frontend services.
+### Dashboard Statistics
+- **Total Books** - Your entire library count
+- **Currently Reading** - Books with start date but no end date
+- **Finished This Month** - Books completed in current month
+- **Pages Read** - Total pages from all finished books
+- **Average Reading Time** - Average days to complete a book
+- **Top Genres** - Your most-read genres
 
-## 🧪 Development
+### Monthly Progress Chart
+- Interactive bar chart showing pages read per month
+- Last 12 months of data
+- Hover for exact counts
+- Responsive and mobile-friendly
 
-### Running Tests
-```bash
-# Backend
-cd backend
-npm test
+## 🚢 Deployment
 
-# Frontend  
-cd frontend
-npm test
-```
+This monorepo is optimized for deployment with Coolify or any container platform.
+
+### Docker Compose
+The included `docker-compose.yml` sets up PostgreSQL. Extend it for backend/frontend services.
+
+### Coolify Deployment
+1. Connect this repository to Coolify
+2. **Backend Service:**
+   - Build directory: `/backend`
+   - Port: 3000
+   - Set environment variables via Coolify UI
+3. **Frontend Service:**
+   - Build directory: `/frontend`
+   - Build command: `npm install && npm run build`
+   - Serve from `dist/` directory
+
+## 🧪 Testing
 
 ### API Testing
-Use the included test script:
 ```bash
+# Test backend health
+curl http://localhost:3000/api/health
+curl http://localhost:3000/api/db-health
+
+# Test book search
+curl "http://localhost:3000/api/books/search?q=tolkien"
+
+# Run included test script
 ./test-api.sh
 ```
 
-## 📖 Documentation
+### Manual Testing
+1. Start backend and frontend
+2. Navigate to http://localhost:5173
+3. Add books via search or manual entry
+4. Set reading dates
+5. View statistics on dashboard
+6. Check monthly chart
 
-- `SETUP_INSTRUCTIONS.md` - Detailed setup guide
-- `GETTING_STARTED.md` - Quick start tutorial
-- `DATABASE_SETUP.md` - Database configuration
-- `GOOGLE_BOOKS_IMPLEMENTATION.md` - API integration details
-- `TAILWIND_V4_SETUP.md` - Styling setup
-- `VUE_COMPOSITION_API.md` - Vue patterns used
-- `BOOK_EDIT_FEATURE.md` - Edit functionality
-- `READING_DATES_FEATURE.md` - Date tracking feature
+## 📚 Documentation
+
+- **Database Setup:** See `DATABASE_SETUP.md`
+- **Environment Config:** See `ENVIRONMENT_CONFIG.md`
+- **Getting Started:** See `GETTING_STARTED.md`
+- **Original Documentation:** See `docs/` directory
+
+## 🔧 Development
+
+### Port Reference
+
+| Service | Development | Docker |
+|---------|-------------|--------|
+| Frontend | 5173 | 8080 |
+| Backend | 3000 | 3000 |
+| Database | 5432 | 5432 |
+
+### Common Commands
+
+```bash
+# Database
+./db.sh start
+./db.sh status
+./db.sh psql
+
+# Backend
+cd backend
+npm run dev
+
+# Frontend
+cd frontend
+npm run dev
+
+# Docker
+docker-compose up -d
+docker-compose logs -f
+docker-compose down
+```
+
+## 🐛 Troubleshooting
+
+### Database Connection Error
+```bash
+# Check if database is running
+./db.sh status
+
+# Start if needed
+./db.sh start
+```
+
+### CORS Error in Browser
+```bash
+# Check backend CORS setting matches frontend port
+grep CORS_ORIGIN backend/.env
+# Should be: CORS_ORIGIN=http://localhost:5173
+
+# Restart backend after changes
+```
+
+### Port Already in Use
+```bash
+# Find what's using the port
+sudo lsof -i :5173  # or :3000
+
+# Kill process or use different port
+```
 
 ## 🤝 Contributing
 
@@ -221,10 +322,12 @@ This project is open source and available under the [MIT License](LICENSE).
 ## 🙏 Acknowledgments
 
 - Google Books API for book data
-- Vue.js and Vite teams
-- Tailwind CSS team
-- Open source community
+- Vue.js team for excellent framework
+- Tailwind CSS for utility-first styling
+- Chart.js for beautiful visualizations
 
 ---
 
 **Happy Reading! 📚✨**
+
+For detailed setup instructions and feature documentation, see the additional `.md` files in the project root.
