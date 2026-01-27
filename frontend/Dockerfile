@@ -2,6 +2,9 @@ FROM node:20-alpine as build
 
 WORKDIR /app
 
+# Override NODE_ENV to ensure devDependencies are installed
+ENV NODE_ENV=development
+
 COPY package*.json ./
 
 RUN npm ci
