@@ -49,10 +49,10 @@ Thumbs.db
 *.sqlite3
 *.db
 
-# Package manager
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
+## Package manager
+#package-lock.json
+#yarn.lock
+#pnpm-lock.yaml
 
 # Vite
 .vite/
