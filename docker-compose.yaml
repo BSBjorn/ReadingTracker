@@ -1,14 +1,13 @@
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: reading-tracker-db
     restart: unless-stopped
     environment:
       POSTGRES_USER: reading_user
       POSTGRES_PASSWORD: reading_pass
       POSTGRES_DB: reading_tracker
-    ports:
-      - "5433:5432"  # Use 5433 to avoid conflict with dev database
+    expose:
+      - "5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
@@ -24,14 +23,13 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: reading-tracker-backend
     restart: unless-stopped
-    ports:
-      - "3001:3000"  # Use 3001 to avoid conflict with dev backend
+    expose:
+      - "3000"
     environment:
       DATABASE_URL: postgresql://reading_user:reading_pass@postgres:5432/reading_tracker
       PORT: 3000
-      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:8080}
+      CORS_ORIGIN: ${CORS_ORIGIN}
       NODE_ENV: ${NODE_ENV:-production}
       GOOGLE_BOOKS_API_KEY: ${GOOGLE_BOOKS_API_KEY}
     depends_on:
@@ -45,15 +43,16 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        VITE_API_URL: ${VITE_API_URL:-/api}
-    container_name: reading-tracker-frontend
+        VITE_API_URL: ${VITE_API_URL}
     restart: unless-stopped
-    ports:
-      - "8080:80"
+    expose:
+      - "80"
     depends_on:
       - backend
     networks:
       - reading-tracker-network
+    labels:
+      - "coolify.managed=true"
 
 volumes:
   postgres_data:
